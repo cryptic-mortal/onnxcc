@@ -1,5 +1,4 @@
-# Ignore everything in the root directory
-/*
+
 
 # Re-include .gitignore
 !/.gitignore
