@@ -37,14 +37,44 @@ def build_mlp():
         initializer=[w1, b1, w2, b2]
     )
     # Node count: 6 ( matmul, add, relu, matmul, add, relu)
-    # initializer count 4 (w1,b1,w1,b2)
+    # initializer count 4 (w1,b1,w2,b2)
 
     model_def = helper.make_model(
     graph_def,
     producer_name="testmod.py",
     opset_imports=[helper.make_opsetid("", 13)],
-)
+    )
+    model_def.ir_version = 8
     
     base_dir = os.path.dirname(__file__) if "__file__" in globals() else os.getcwd()
     path = os.path.join(base_dir, "mlp.onnx")
     return (model_def, path)
+
+def make_input():
+    rng = np.random.default_rng(43)
+    return rng.standard_normal((1, 4)).astype(np.float32)
+
+
+def verify(model):
+    onnx.checker.check_model(model)
+    ops = [n.op_type for n in model.graph.node]
+    print("op types:", ops)
+    assert set(ops) <= {"MatMul", "Add", "Relu"}, "unexpected op (Gemm?)"
+    assert len(model.graph.node) == 6
+    assert len(model.graph.initializer) == 4
+    assert model.opset_import[0].version == 13
+
+
+def main():
+    model, model_path = build_mlp()
+    verify(model)
+    onnx.save(model, model_path)
+
+    bin_path = os.path.join(os.path.dirname(model_path), "input.bin")
+    make_input().tofile(bin_path)
+    assert os.path.getsize(bin_path) == 16
+    print("wrote", os.path.basename(model_path), "and", os.path.basename(bin_path))
+
+
+if __name__ == "__main__":
+    main()

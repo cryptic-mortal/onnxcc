@@ -1,4 +1,5 @@
-
+# Ignore everything in the root directory
+/*
 
 # Re-include .gitignore
 !/.gitignore
@@ -8,6 +9,7 @@
 !/README.md
 !/CMakeLists.txt
 !/tests/
+!/scripts/
 
 # Ignore these files and directories
 .DS_Store
