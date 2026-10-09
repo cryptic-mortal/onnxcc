@@ -5,6 +5,7 @@ add_library(onnxcc_lib STATIC
     onnxcc/cli/cli.cpp
     onnxcc/cli/parse.cpp
     onnxcc/cli/dump_command.cpp
+    onnxcc/memory/arena.cpp
 )
 
 add_executable(onnxcc onnxcc/main.cpp)
@@ -27,3 +28,7 @@ target_include_directories(onnxcc_lib
 
 target_compile_options(onnxcc_lib PRIVATE ${ONNXCC_WARNINGS})
 target_compile_options(onnxcc PRIVATE ${ONNXCC_WARNINGS})
+
+target_compile_options(onnxcc_lib PRIVATE ${ONNXCC_SANITIZER_FLAGS})
+target_link_options(onnxcc_lib PUBLIC ${ONNXCC_SANITIZER_FLAGS})
+target_compile_options(onnxcc PRIVATE ${ONNXCC_SANITIZER_FLAGS})

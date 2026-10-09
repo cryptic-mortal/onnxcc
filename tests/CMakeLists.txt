@@ -2,6 +2,7 @@ add_executable(unit_tests
     unit/test_sanity.cpp
     unit/test_cli.cpp
     unit/test_parse.cpp
+    unit/test_arena.cpp
     unit/test_headers_compile.cpp
 )
 
@@ -47,3 +48,5 @@ add_library(header_selfcheck OBJECT ${ONNXCC_SELFCHECK_SOURCES})
 # For onnxcc_lib's PUBLIC include directories. Nothing is linked so it never produces a binary
 target_link_libraries(header_selfcheck PRIVATE onnxcc_lib)
 target_compile_options(header_selfcheck PRIVATE ${ONNXCC_WARNINGS})
+
+target_compile_options(unit_tests PRIVATE ${ONNXCC_SANITIZER_FLAGS})
