@@ -5,6 +5,7 @@ add_library(onnxcc_lib STATIC
     onnxcc/cli/cli.cpp
     onnxcc/cli/parse.cpp
     onnxcc/cli/dump_command.cpp
+    onnxcc/ir/graph.cpp
 )
 
 add_executable(onnxcc onnxcc/main.cpp)
